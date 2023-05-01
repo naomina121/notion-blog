@@ -1,7 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
+import Image from 'next/image'
 import React, { FC } from 'react'
 import Layout from '@/components/Layout'
 import { ArticleProps, Params } from '@/types'
+import { cover, lastUpdatedAt, postCategory, postTitle, publishedAt } from '@/utils/data'
 import { fetchBlocksByPageId, fetchPages } from '@/utils/notion'
 
 export const getStaticProps: GetStaticProps = async (context) => {
@@ -36,7 +38,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
-const Article: FC<ArticleProps> = (page,blocks) => {
+const Article: FC<ArticleProps> = ({ page, blocks }) => {
+  console.log(page)
   return (
     <Layout>
       <div className='flex w-full justify-between'>
@@ -46,17 +49,17 @@ const Article: FC<ArticleProps> = (page,blocks) => {
             {/* 記事の更新日・作成日・カテゴリー・タグ */}
             <div className='flex text-sm text-gray-500'>
               <span className='mr-2'>作成日</span>
-              <time className='mr-4' dateTime='2022-07-07' itemProp='datepublished'>
-                2022/7/7
+              <time className='mr-4' dateTime={publishedAt(page)} itemProp='datepublished'>
+                {publishedAt(page)}
               </time>
               <span className='mr-4'>更新日</span>
-              <time className='' dateTime='2022-07-07' itemProp='modified'>
-                2023/9/9
+              <time className='' dateTime={lastUpdatedAt(page)} itemProp='modified'>
+                {lastUpdatedAt(page)}
               </time>
             </div>
             <div className='text-xs'>
               <a href='' className='hover:opacity-80'>
-                <span className='mr-1 bg-lime-600 px-2 py-1 text-white'>プログラミング</span>
+                <span className='mr-1 bg-lime-600 px-2 py-1 text-white'>{postCategory(page)}</span>
               </a>
               <a href='' className='hover:opacity-80'>
                 <span className='mr-1 bg-gray-200 px-2 py-1'>オブジェクト指向</span>
@@ -67,13 +70,9 @@ const Article: FC<ArticleProps> = (page,blocks) => {
             </div>
           </section>
           {/* 記事タイトル */}
-          <h1 className='text-3xl'>初学者が学ぶべき、オブジェクト指向解説</h1>
+          <h1 className='text-3xl'>{postTitle(page)}</h1>
           {/* 記事画像 */}
-
-          <div className='my-4 flex h-[360px] w-full items-center justify-center bg-gray-200'>
-            <p className='text-2xl text-gray-600'>ここにアイキャッチ画像が入る予定です。</p>
-            <img src='' alt='' />
-          </div>
+          <Image src={`${cover(page)}`} width={1152} height={688} alt={postTitle(page)} />
           {/* 記事本文 */}
           <section className='text-gray-800'>
             <p className='my-6'>冒頭の文章などはこのように表示されます。</p>

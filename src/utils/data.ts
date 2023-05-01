@@ -2,7 +2,12 @@ import { PageType, RichTextType } from '@/types'
 
 // アイキャッチの設定
 export const cover = (page: PageType) => {
-  return page.cover ? page.cover : 'img/noimg.jpg'
+  if (!page.cover) return '/img/noimg.jpg'
+  if (page.cover.external) {
+    return page.cover.external.url
+  } else if (page.cover.file) {
+    return page.cover.file.url
+  }
 }
 
 // 記事タイトルの設定

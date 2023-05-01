@@ -72,7 +72,7 @@ const Article: FC<ArticleProps> = ({ page, blocks }) => {
           {/* 記事タイトル */}
           <h1 className='text-3xl'>{postTitle(page)}</h1>
           {/* 記事画像 */}
-          <Image src={`${cover(page)}`} width={1152} height={688} alt={postTitle(page)} />
+          <Image className='block my-4' src={`${cover(page)}`} width={1152} height={688} alt={postTitle(page)} />
           {/* 記事本文 */}
           <section className='text-gray-800'>
             <p className='my-6'>冒頭の文章などはこのように表示されます。</p>

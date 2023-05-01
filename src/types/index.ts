@@ -84,6 +84,12 @@ export type CategoryProps = IndexProps & {
   category: string
 }
 
+export type ArticleProps = IndexProps & {
+  page: PageType
+  blocks: Array<any> //ひとまず便宜上anyで定義しておく
+}
+
 export type Params = ParsedUrlQuery & {
   category: string
+  slug: string
 }

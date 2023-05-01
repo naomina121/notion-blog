@@ -10,7 +10,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   // 受け取ってきたクエリ文字列を型定義する
   const { category } = context.params as Params
   // NotionAPIからデータを取得する
-  const { results: pages } = await fetchPages({ category })
+  const { results: pages } = await fetchPages({ category: category })
   // ダミーデータを渡す。
   //const pages = dammyPages
 

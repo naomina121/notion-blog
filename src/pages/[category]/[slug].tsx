@@ -1,7 +1,42 @@
-import React from 'react'
+import { GetStaticPaths, GetStaticProps } from 'next'
+import React, { FC } from 'react'
 import Layout from '@/components/Layout'
+import { ArticleProps, Params } from '@/types'
+import { fetchBlocksByPageId, fetchPages } from '@/utils/notion'
 
-const Article = () => {
+export const getStaticProps: GetStaticProps = async (context) => {
+  // 受け取ってきたクエリ文字列を型定義する
+  const { slug } = context.params as Params
+  // NotionAPIからデータを取得する(引数は変数名を識別するため)
+  const { results: pages } = await fetchPages({ slug: slug })
+  const page = pages[0]
+  const pageId = page.id
+  const { results: blocks } = await fetchBlocksByPageId(pageId)
+
+  // オブジェクトが空だったら404を返す
+  if (!pages.length) {
+    return {
+      notFound: true,
+    }
+  }
+
+  return {
+    props: {
+      page: page, //ページオブジェクトを受け取る
+      blocks: blocks, //記事本文のブロックを受け取る。
+    },
+  }
+}
+
+// 動的URLに対応させる。
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: 'blocking',
+  }
+}
+
+const Article: FC<ArticleProps> = (page,blocks) => {
   return (
     <Layout>
       <div className='flex w-full justify-between'>

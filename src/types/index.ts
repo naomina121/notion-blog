@@ -53,6 +53,7 @@ export type PropertyType = {
 }
 
 export type RichTextType = {
+  type: string,
   text?: {
     content: string
     link: null | {
@@ -71,6 +72,62 @@ export type RichTextType = {
   href: null | string
 }
 
+export type BlockType = {
+  type: string
+  heading_2?: {
+    is_toggleable: boolean
+    color: string
+    rich_text: RichTextType[]
+  }
+  heading_3?: {
+    is_toggleable: boolean
+    color: string
+    rich_text: RichTextType[]
+  }
+  image?: {
+    caption: []
+    type: string
+    file?: {
+      url: string
+      expiry_time: Date
+    }
+    external?: {
+      url: string
+    }
+  }
+  paragraph?: {
+    rich_text: RichTextType[]
+    color: string
+  }
+  code?: {
+    caption: []
+    rich_text: RichTextType[]
+    language: string
+  }
+  bulleted_list_item?: {
+    rich_text: RichTextType[]
+    color: string
+    children?: [{ type: string }, { bulleted_list_item: BlockType['bulleted_list_item'] }]
+  }
+  numbered_list_item?: {
+    rich_text: RichTextType[]
+    color: string
+    children?: [{ type: string }, { numbred_list_item: BlockType['numbered_list_item'] }]
+  }
+  quote?: {
+    rich_text: RichTextType[]
+    color: string
+    children?: [
+      { type: string },
+      {
+        quote: BlockType['quote']
+      },
+    ]
+  }
+}
+
+// page
+
 export type IndexProps = {
   pages: PageType[]
 }
@@ -86,10 +143,14 @@ export type CategoryProps = IndexProps & {
 
 export type ArticleProps = IndexProps & {
   page: PageType
-  blocks: Array<any> //ひとまず便宜上anyで定義しておく
+  blocks: BlockType[]
 }
 
 export type Params = ParsedUrlQuery & {
   category: string
   slug: string
+}
+
+export type ContentsProps = {
+  blocks: BlockType[]
 }

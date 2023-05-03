@@ -2,8 +2,9 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import Image from 'next/image'
 import React, { FC } from 'react'
 import Layout from '@/components/Layout'
+import Contents from '@/components/blogs/Contents'
 import { ArticleProps, Params } from '@/types'
-import { cover, lastUpdatedAt, postCategory, postTitle, publishedAt } from '@/utils/data'
+import { cover, lastUpdatedAt, postCategory, postTitle, publishedAt, tags } from '@/utils/data'
 import { fetchBlocksByPageId, fetchPages } from '@/utils/notion'
 
 export const getStaticProps: GetStaticProps = async (context) => {
@@ -61,58 +62,25 @@ const Article: FC<ArticleProps> = ({ page, blocks }) => {
               <a href='' className='hover:opacity-80'>
                 <span className='mr-1 bg-lime-600 px-2 py-1 text-white'>{postCategory(page)}</span>
               </a>
-              <a href='' className='hover:opacity-80'>
-                <span className='mr-1 bg-gray-200 px-2 py-1'>オブジェクト指向</span>
-              </a>
-              <a href='' className='hover:opacity-80'>
-                <span className='mr-1 bg-gray-200 px-2 py-1'>初学者</span>
-              </a>
+              {tags(page).map((tag, index) => (
+                <a key={index} href={`/tag/${tag}`} className='hover:opacity-80'>
+                  <span className='mr-1 bg-gray-200 px-2 py-1'>{tag}</span>
+                </a>
+              ))}
             </div>
           </section>
           {/* 記事タイトル */}
           <h1 className='text-3xl'>{postTitle(page)}</h1>
           {/* 記事画像 */}
-          <Image className='block my-4' src={`${cover(page)}`} width={1152} height={688} alt={postTitle(page)} />
+          <Image
+            className='my-4 block'
+            src={`${cover(page)}`}
+            width={1152}
+            height={688}
+            alt={postTitle(page)}
+          />
           {/* 記事本文 */}
-          <section className='text-gray-800'>
-            <p className='my-6'>冒頭の文章などはこのように表示されます。</p>
-            <p className='my-6'>ここに何かしらの説明を入れても良いでしょう。</p>
-            <h2 className='my-6 bg-sky-100 p-3 text-2xl text-gray-700'>
-              H2のタイトルの表示のされ方はこんな感じです。
-            </h2>
-            <p className='my-6'>記事本文の装飾を付け加えることも可能です。</p>
-            <p className='my-6'>
-              例えば、
-              <a href='' className='text-blue-600 hover:opacity-80'>
-                リンク
-              </a>
-              はこのように表示されます。
-            </p>
-            <p className='my-6'>
-              その設定に関しては後ほどご説明します。今回は、最低限のタグのデザインのみを設定しています。
-            </p>
-            <h3 className='my-6 border-b-2 border-solid py-3 text-xl text-gray-600'>
-              小見出しはH3まで活用できます。
-            </h3>
-            <p className='my-6'>リストタグは下記のようになります。</p>
-            <ul className='list-disc'>
-              <li className='mb-2 ml-4'>リスト一覧です。</li>
-              <li className='mb-2 ml-4'> リスト一覧です。</li>
-              <li className='mb-2 ml-4'>リスト一覧です。</li>
-            </ul>
-            <p className='my-6'>番号付きのリストも使用できます</p>
-            <ol className='list-decimal'>
-              <li className='mb-2 ml-7'>リスト一覧です。</li>
-              <li className='mb-2 ml-7'> リスト一覧です。</li>
-              <li className='mb-2 ml-7'>リスト一覧です。</li>
-            </ol>
-            <h2 className='my-6 bg-sky-100 p-3 text-2xl text-gray-700'>まとめ</h2>
-            <p className='my-6'>TailWindCSSがとても便利なことはご理解いただけたでしょうか？</p>
-            <p className='my-6'>
-              このスタイルに関してはご自由にカスタマイズしてみるのもありだと思います
-            </p>
-            <p className='my-6'>ぜひ、皆様もTailWindCSSをご活用してみてくださいね！</p>
-          </section>
+          <Contents blocks={blocks} />
           {/* 著作者 */}
           <section className='my-3 flex items-center justify-around border-[1px] border-solid border-gray-300 p-4'>
             <div className='flex h-[120px] w-[120px] items-center justify-center rounded-full bg-gray-300 text-sm text-gray-600'>

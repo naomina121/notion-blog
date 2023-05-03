@@ -1,0 +1,27 @@
+{
+  "presets": ["next/babel"],
+  "prismjs": [
+    {
+      "languages": [
+        "javascript",
+        "css",
+        "markup",
+        "json",
+        "git",
+        "ts",
+        "powershell",
+        "plean_text",
+        "json"
+      ],
+      "plugins": [
+        "line-numbers",
+        "toolbar",
+        "copy-to-clipboard",
+        "show-language",
+        "filter-highlight-all"
+      ],
+      "theme": "tomorrow",
+      "css": true
+    }
+  ]
+}
